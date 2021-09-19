@@ -10,8 +10,9 @@ module.exports = {
             },
             userId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
                 references: {
-                    model: "user",
+                    model: "users",
                     key: "id"
                 },
                 onUpdate: "CASCADE",
@@ -19,6 +20,7 @@ module.exports = {
             },
             todoId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
                 references: {
                     model: "todos",
                     key: "id"

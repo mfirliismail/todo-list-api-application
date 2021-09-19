@@ -11,13 +11,17 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            todos.belongsToMany(models.users, {
+                through: models.todolists,
+                as: "users",
+                foreignKey: "todoId"
+            })
         }
     };
     todos.init({
         task: DataTypes.STRING,
-        status: DataTypes.BOOLEAN,
-        userId: DataTypes.INTEGER
+        status: DataTypes.BOOLEAN
+
     }, {
         sequelize,
         modelName: 'todos',

@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class todolist extends Model {
+    class todolists extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,15 +11,16 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            todolists.belongsTo(models.users, { foreignKey: "userId" })
+            todolists.belongsTo(models.todos, { foreignKey: "todoId" })
         }
     };
-    todolist.init({
+    todolists.init({
         userId: DataTypes.INTEGER,
         todoId: DataTypes.INTEGER
     }, {
         sequelize,
-        modelName: 'todolist',
+        modelName: 'todolists',
     });
-    return todolist;
+    return todolists;
 };
