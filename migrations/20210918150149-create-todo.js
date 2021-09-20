@@ -14,7 +14,8 @@ module.exports = {
                 type: Sequelize.STRING
             },
             status: {
-                type: Sequelize.BOOLEAN
+                type: Sequelize.BOOLEAN,
+                defaultValue: 0
             },
             userId: {
                 type: Sequelize.INTEGER,
