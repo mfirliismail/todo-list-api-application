@@ -21,27 +21,12 @@ module.exports = {
     },
     get: async(req, res) => {
         try {
-            const getUser = await users.findAll({
-                include: [{
-                    model: todos,
-                    as: "todos",
-                    through: {
-                        attributes: ["userId", "todoId"],
-                    }
-
-                }, ],
-                order: [
-                    ['createdAt', 'DESC'],
-                    [{ model: todos, as: 'todos' }, 'createdAt', 'DESC'],
-                ],
-            })
+            const getUser = await users.findAll()
 
             return res.status(200).json({
                 status: "success",
                 message: "success retrieved data",
-                data: {
-                    getUser
-                }
+                data: getUser
             })
         } catch (error) {
             console.log(error)

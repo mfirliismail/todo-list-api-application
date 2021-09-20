@@ -11,11 +11,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            users.belongsToMany(models.todos, {
-                through: models.todolists,
-                as: "todos",
-                foreignKey: "userId"
-            })
+            users.hasMany(models.todos, { as: "todos", foreignKey: "userId" })
         }
     };
     users.init({

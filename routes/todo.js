@@ -3,6 +3,7 @@ const todo = require('../controllers/todo')
 const router = express.Router()
 const auth = require('../middlewares/auth')
 
-router.post('/:todoId', auth, todo.addTodo)
+router.post('/', auth, todo.addTodo)
 router.get('/', auth, todo.getTodo)
+
 module.exports = router

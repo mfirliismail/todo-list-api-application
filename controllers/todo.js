@@ -1,25 +1,18 @@
-const { users, todos, todolists } = require('../models')
+const { todos } = require('../models')
 
 
 
 module.exports = {
 
     addTodo: async(req, res) => {
-        const { todoId } = req.params
         const userId = req.user.id
+        const body = req.body
         try {
-            const check = await todolists.findOne({ where: { userId, todoId } });
 
-            if (check) {
-                return res.status(400).json({
-                    status: 'failed',
-                    message: 'Already add todo',
-                });
-            }
-
-            const todoCreate = await todolists.create({
-                userId: userId,
-                todoId: todoId
+            const todoCreate = await todos.create({
+                task: body.task,
+                status: body.status,
+                userId: userId
             })
 
             if (!todoCreate) {
@@ -28,50 +21,47 @@ module.exports = {
                     message: "cannot add todo"
                 })
             }
-            const response = await todos.findOne({
-                where: {
-                    id: todoId
-                },
-                attributes: { exclude: ['createdAt', 'updatedAt'] },
-                include: [{
-                    model: users,
-                    through: {
-                        attributes: ["userId", "todoId"]
-                    },
-                    as: "users",
-                    attributes: ["id", "username", "gender"]
-                }]
-            })
 
             res.status(200).json({
                 status: 'success',
                 message: 'Successfully add todo',
-                data: {
-                    todo: response,
-                },
+                data: todoCreate
             });
         } catch (error) {
             console.log(error)
+            return res.status(500).json({
+                status: "failed",
+                message: "Internal Server Error"
+            })
         }
     },
     getTodo: async(req, res) => {
+        const user = req.user
         try {
-            const getTodo = await todos.findAll({
-                include: {
-                    model: users,
-                    as: "users",
-                    through: {
-                        attributes: ["userId", "todoId"],
-                    }
+            const get = await todos.findAll({
+                where: {
+                    userId: user.id
                 }
             })
+            if (!get) {
+                return res.status(400).json({
+                    status: "failed",
+                    message: "you havent add todo to your list"
+                })
+            }
 
             return res.status(200).json({
                 status: "success",
-                data: getTodo
+                message: "Success retrieved your todo lists",
+                data: get
             })
+
         } catch (error) {
             console.log(error)
+            return res.status(500).json({
+                status: "failed",
+                message: "Internal Server Error"
+            })
         }
     }
 }
